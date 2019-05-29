@@ -1737,27 +1737,21 @@ public class MetadataService {
         private String[] field_order_type_info = new String[]{'field'};
     }
     public virtual class CustomValue extends Metadata {
-        /*public String color;
-        public Boolean default_x;
-        public String description;
-        public Boolean isActive;
-        public String label;*/
-        public String type = 'CustomValue';
+        public String color;
         public String fullName;
-        private String[] fullName_type_info = new String[]{'fullName',SOAP_M_URI,null,'0','1','false'};
-            public String color;
         public Boolean default_x;
         public String description;
         public Boolean isActive;
         public String label;
+        private String[] fullName_type_info = new String[]{'fullName',SOAP_M_URI,null,'0','1','false'};
         private String[] color_type_info = new String[]{'color',SOAP_M_URI,null,'0','1','false'};
-            private String[] default_x_type_info = new String[]{'default',SOAP_M_URI,null,'1','1','false'};
-                private String[] description_type_info = new String[]{'description',SOAP_M_URI,null,'0','1','false'};
-                    private String[] isActive_type_info = new String[]{'isActive',SOAP_M_URI,null,'0','1','false'};
-                        private String[] label_type_info = new String[]{'label',SOAP_M_URI,null,'0','1','false'};
-                            //private String[] apex_schema_type_info = new String[]{SOAP_M_URI,1,0};
-       private String[] field_order_type_info = new String[]{'fullName','color','default_x','description','isActive','label'};
-
+        private String[] default_x_type_info = new String[]{'default',SOAP_M_URI,null,'1','1','false'};
+        private String[] description_type_info = new String[]{'description',SOAP_M_URI,null,'0','1','false'};
+        private String[] isActive_type_info = new String[]{'isActive',SOAP_M_URI,null,'0','1','false'};
+        private String[] label_type_info = new String[]{'label',SOAP_M_URI,null,'0','1','false'};
+        private String[] apex_schema_type_info = new String[]{'http://soap.sforce.com/2006/04/metadata','true','false'};
+        private String[] field_order_type_info = new String[]{'fullName','color','default_x','description','isActive','label'};
+    
     }
     public class ListView extends Metadata {
         public String type = 'ListView';
@@ -11863,16 +11857,17 @@ public class MetadataService {
     }
     public class Picklist {
         public String controllingField;
+        private String type = 'Picklist';
         public MetadataService.PicklistValue[] picklistValues;
         public Boolean restrictedPicklist;
         public Boolean sorted;
-        private String type = 'picklist';
+        private String[] type_att_info = new String[]{'xsi:type'};
         private String[] controllingField_type_info = new String[]{'controllingField','http://soap.sforce.com/2006/04/metadata',null,'0','1','false'};
         private String[] picklistValues_type_info = new String[]{'picklistValues','http://soap.sforce.com/2006/04/metadata',null,'0','-1','false'};
         private String[] restrictedPicklist_type_info = new String[]{'restrictedPicklist','http://soap.sforce.com/2006/04/metadata',null,'0','1','false'};
         private String[] sorted_type_info = new String[]{'sorted','http://soap.sforce.com/2006/04/metadata',null,'1','1','false'};
         private String[] apex_schema_type_info = new String[]{'http://soap.sforce.com/2006/04/metadata','true','false'};
-        private String[] field_order_type_info = new String[]{'controllingField','picklistValues','restrictedPicklist','sorted'};
+        private String[] field_order_type_info = new String[]{'controllingField','type','picklistValues','restrictedPicklist','sorted'};
     }
     public class deploy_element {
         public String ZipFile;
