@@ -141,10 +141,10 @@ public with sharing class MetadataServiceExamples
     {
         MetadataService.MetadataPort service = createService();
         MetadataService.CustomField customField = new MetadataService.CustomField();
-        customField.fullName = 'Test__c.TestField__c';
+        customField.fullName = 'Account.First_Name__c';
         customField.label='New Test Field Label';
         customField.type_x = 'Text';
-        customField.length = 52;
+        customField.length = 56;
         List<MetadataService.SaveResult> results =
             service.updateMetadata(
                 new MetadataService.Metadata[] { customField });
@@ -293,8 +293,8 @@ public with sharing class MetadataServiceExamples
             System.debug(fileProperty.fullName);
     }
 
-	/*
-	* Piclkist in CustomField has been deprecated use valueSet instead
+    /*
+    * Piclkist in CustomField has been deprecated use valueSet instead*/
     public static void createPicklistField()
     {
         MetadataService.MetadataPort service = createService();
@@ -302,13 +302,34 @@ public with sharing class MetadataServiceExamples
         customField.fullName = 'Lead.picklist__c';
         customField.label = 'picklist';
         customField.type_x = 'Picklist';
-        metadataservice.Picklist pt = new metadataservice.Picklist();
+        MetadataService.ValueSet valueSet = new MetadataService.ValueSet();
+        MetadataService.ValueSetValuesDefinition valueSetDefinition = new MetadataService.ValueSetValuesDefinition();
+        valueSetDefinition.sorted = false;
+        List<MetadataService.CustomValue> value = new List<MetadataService.CustomValue>();
+        MetadataService.CustomValue c1 = new MetadataService.CustomValue();
+        c1.fullName = 'No Deposit';
+        c1.default_x  = false;
+        c1.label   = 'No Deposit';
+        MetadataService.CustomValue c2 = new MetadataService.CustomValue();
+        c2.fullName = 'No Deposit2';
+        c2.default_x  = false;
+        c2.label   = 'No Deposit';
+        value.add(c2);
+        valueSetDefinition.value = value;
+        /*List<MetadataService.StandardValue> standardValue = new List<MetadataService.StandardValue>();
+        MetadataService.StandardValue stValue = new MetadataService.StandardValue();
+        stValue.fullName = 'Firest';
+        stValue.default_x=false ;
+        standardValue.add(stValue);*/
+        valueSet.valueSetDefinition = valueSetDefinition ;
+        customField.valueSet = valueSet;
+        /*metadataservice.Picklist pt = new metadataservice.Picklist();
         pt.sorted= false;
         metadataservice.PicklistValue one = new metadataservice.PicklistValue();
         one.fullName= 'first';
         one.default_x=false ;
         pt.picklistValues = new List<MetadataService.PicklistValue>{one};
-        customField.picklist = pt ;
+        customField.picklist = pt ;*/
         List<MetadataService.SaveResult> results =
             service.createMetadata(
                 new MetadataService.Metadata[] { customField });
@@ -319,7 +340,7 @@ public with sharing class MetadataServiceExamples
     {
         MetadataService.MetadataPort service = createService();
         MetadataService.CustomField customField = new MetadataService.CustomField();
-        customField.fullName = 'Lead.picklist__c';
+        customField.fullName = 'Account.Active__c';
         customField.label = 'picklist';
         customField.type_x = 'Picklist';
         metadataservice.Picklist pt = new metadataservice.Picklist();
@@ -331,12 +352,43 @@ public with sharing class MetadataServiceExamples
         three.fullName= 'third';
         three.default_x=false ;
         pt.picklistValues = new list<metadataservice.PicklistValue>{two,three};
-        customField.picklist = pt ;
+        //customField.picklist = pt ;
+        MetadataService.ValueSet valueSet = new MetadataService.ValueSet();
+        MetadataService.ValueSetValuesDefinition valueSetDefinition = new MetadataService.ValueSetValuesDefinition();
+        valueSetDefinition.sorted = false;
+        List<MetadataService.CustomValue> value = new List<MetadataService.CustomValue>();
+        MetadataService.CustomValue c1 = new MetadataService.CustomValue();
+        c1.fullName = 'No Test Vlaue';
+        c1.default_x  = false;
+        c1.isActive = true;
+        c1.label   = 'No Test Vlaue';
+        MetadataService.CustomValue c2 = new MetadataService.CustomValue();
+        c2.fullName = 'No Test Vlaue2';
+        c2.default_x  = false;
+        c2.isActive = true;
+        c2.label   = 'No Test Vlaue2';
+         value.add(c1);
+        value.add(c2);
+        valueSetDefinition.value = value;
+        system.debug(valueSetDefinition.value );
+        /*List<MetadataService.StandardValue> standardValue = new List<MetadataService.StandardValue>();
+        MetadataService.StandardValue stValue = new MetadataService.StandardValue();
+        stValue.fullName = 'Firest';
+        stValue.default_x=false ;
+        standardValue.add(stValue);*/
+        valueSet.valueSetDefinition = valueSetDefinition ;
+        system.debug(value.size());
+        customField.valueSet = valueSet;
+        system.debug(valueSet);
+        system.debug(customField);
+
+        String jsonVa = JSON.serialize(customField.valueSet.valueSetDefinition.value[0]);
+        system.debug(jsonva);
         List<MetadataService.SaveResult> results =
             service.updateMetadata(
                 new MetadataService.Metadata[] { customField });
-        handleSaveResults(results[0]);
-    }*/
+        handleSaveResults(results[0]);/**/
+    }/**/
 
     /**
      * Example of how to retrieve dependent picklist values
@@ -1535,46 +1587,46 @@ public with sharing class MetadataServiceExamples
     }
 
 
-	/**
-	 * Method cloneReport(String sFolderApiName, String sReportApiName, String tFolderApiName, String tReportApiName)
-	 * @param sFolderApiName: api name of the (source) folder of the report to clone
-	 * @param sReportApiName: api name of the (source) report to clone
-	 * @param tFolderApiName: api name of the (target) folder to create the cloned report in
-	 * @param tReportApiName: api name of the (target) cloned report 
-	 */
-	public static void cloneReport(String sFolderApiName, String sReportApiName, String tFolderApiName, String tReportApiName) {
-	    MetadataService.MetadataPort service = new MetadataService.MetadataPort();
-	    service.SessionHeader = new MetadataService.SessionHeader_element();
-	    service.SessionHeader.sessionId = UserInfo.getSessionId();
-	
-	    // Get the report to clone
-	    MetadataService.Report reportToClone = (MetadataService.Report) service.readMetadata('Report', new String[] { sFolderApiName+'/'+sReportApiName }).getRecords()[0];
-	
-	    // Instanciate a new one to attribute the same metadata from the report to clone
-	    MetadataService.Report apexReport = new MetadataService.Report();
-	    // Set the cloned report properties from parameters and the source report
-	    apexReport.name = reportToClone.name + ' Clone';
-	    apexReport.fullName = tFolderApiName + '/' + tReportApiName;
-	    apexReport.reportType = reportToClone.reportType;
-	    apexReport.description = reportToClone.description;
-	    apexReport.format = reportToClone.format;
-	    apexReport.filter = reportToClone.filter;
-	    apexReport.showDetails = reportToClone.showDetails;
-	    apexReport.sortColumn = reportToClone.sortColumn;
-	    apexReport.sortOrder = reportToClone.sortOrder;
-	    apexReport.groupingsAcross = reportToClone.groupingsAcross;
-	    apexReport.groupingsDown = reportToClone.groupingsDown;
-	    apexReport.chart = reportToClone.chart;
-	    apexReport.timeFrameFilter = reportToClone.timeFrameFilter;
-	    apexReport.columns = reportToClone.columns;
-	
-	    // Create the report clone
-	    List<MetadataService.SaveResult> results = service.createMetadata(new MetadataService.Metadata[] { apexReport });
-	
-	    // Handle results
-	    handleSaveResults(results[0]);
-	}
-	
+    /**
+     * Method cloneReport(String sFolderApiName, String sReportApiName, String tFolderApiName, String tReportApiName)
+     * @param sFolderApiName: api name of the (source) folder of the report to clone
+     * @param sReportApiName: api name of the (source) report to clone
+     * @param tFolderApiName: api name of the (target) folder to create the cloned report in
+     * @param tReportApiName: api name of the (target) cloned report 
+     */
+    public static void cloneReport(String sFolderApiName, String sReportApiName, String tFolderApiName, String tReportApiName) {
+        MetadataService.MetadataPort service = new MetadataService.MetadataPort();
+        service.SessionHeader = new MetadataService.SessionHeader_element();
+        service.SessionHeader.sessionId = UserInfo.getSessionId();
+    
+        // Get the report to clone
+        MetadataService.Report reportToClone = (MetadataService.Report) service.readMetadata('Report', new String[] { sFolderApiName+'/'+sReportApiName }).getRecords()[0];
+    
+        // Instanciate a new one to attribute the same metadata from the report to clone
+        MetadataService.Report apexReport = new MetadataService.Report();
+        // Set the cloned report properties from parameters and the source report
+        apexReport.name = reportToClone.name + ' Clone';
+        apexReport.fullName = tFolderApiName + '/' + tReportApiName;
+        apexReport.reportType = reportToClone.reportType;
+        apexReport.description = reportToClone.description;
+        apexReport.format = reportToClone.format;
+        apexReport.filter = reportToClone.filter;
+        apexReport.showDetails = reportToClone.showDetails;
+        apexReport.sortColumn = reportToClone.sortColumn;
+        apexReport.sortOrder = reportToClone.sortOrder;
+        apexReport.groupingsAcross = reportToClone.groupingsAcross;
+        apexReport.groupingsDown = reportToClone.groupingsDown;
+        apexReport.chart = reportToClone.chart;
+        apexReport.timeFrameFilter = reportToClone.timeFrameFilter;
+        apexReport.columns = reportToClone.columns;
+    
+        // Create the report clone
+        List<MetadataService.SaveResult> results = service.createMetadata(new MetadataService.Metadata[] { apexReport });
+    
+        // Handle results
+        handleSaveResults(results[0]);
+    }
+    
     public static void updateDashboard()
     {
         MetadataService.MetadataPort service = createService();
@@ -1601,8 +1653,8 @@ public with sharing class MetadataServiceExamples
         newComponent.sortBy = 'RowLabelAscending';
         dashboard.leftSection.components.add(newComponent);
         handleSaveResults(service.updateMetadata(new List<MetadataService.Metadata> { dashboard })[0]);
-    }    	
-	
+    }       
+    
     /**
      * Error occured processing component OrgPreference. create() not supported for OrgPreferenceSettings (FIELD_INTEGRITY_EXCEPTION). :-(
      **/
@@ -1654,6 +1706,7 @@ public with sharing class MetadataServiceExamples
                     ( error.fields!=null && error.fields.size()>0 ?
                         ' Fields ' + String.join(error.fields, ',') + '.' : '' ) );
             if(messages.size()>0)
+                system.debug(messages);
                 throw new MetadataServiceExamplesException(String.join(messages, ' '));
         }
         if(!saveResult.success)
